@@ -76,7 +76,7 @@ export async function login(req: Request, res: Response) {
 		res.cookie("access_token", access_token, accessTokenCookieOptions);
 		res.cookie("refresh_token", refresh_token, refreshTokenCookieOptions);
 
-		return res.status(200).json({ message: "Login success!" });
+		return res.status(200).json({ message: "Login success!",user: userWoPassword, access_token, refresh_token });
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: "Internal server error" });

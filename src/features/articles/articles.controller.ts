@@ -50,18 +50,29 @@ export async function get_articles_by_id(req: Request, res: Response) {
 	}
 }
 
+
+export async function get_articles_by_user_id(req: Request, res: Response) {
+	try {
+		const { userId } = req.params
+		const articles = await db.select().from(article).where(eq(article.author_id, +userId))
+		return res.status(200).json({ articles })
+	} catch (error) {
+		return res.status(500).json({ message: "Internal server error: getting articles by userid" })
+	}
+}
+
 export async function update_article(req: Request, res: Response) {
 	try {
 		const { articleId } = req.params;
 		const { title, tags, content } = req.body;
+		console.log(title, tags, content)
 
 		await db
 			.update(article)
 			.set({ title, tags, content, created_at: new Date(Date.now()) })
 			.where(eq(article.id, parseInt(articleId, 10)));
 		return res.status(200).json({ message: "Success updating articles" });
-	} catch (error: any) {
-		console.log(error.message);
+	} catch (error) {
 		return res
 			.status(500)
 			.json({ message: "Internal server error: updating article" });
